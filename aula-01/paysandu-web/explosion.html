@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explosão Neyma</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        overflow: hidden;
+        background: #000;
+        color: white;
+        font-family: Arial, sans-serif;
+        position: relative;
+      }
+
+      .background-video {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        filter: brightness(0.35) saturate(1.2) contrast(1.15);
+      }
+
+      .fireworks {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .firework {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 220, 90, 1) 25%,
+          rgba(255, 80, 20, 0.9) 60%,
+          transparent 100%
+        );
+        box-shadow:
+          0 0 40px rgba(255, 220, 120, 0.95),
+          0 0 100px rgba(255, 120, 20, 0.65),
+          inset 0 0 30px rgba(255, 255, 255, 0.8);
+        opacity: 0;
+        animation: fireworkParticle 0.9s ease-out forwards;
+      }
+
+      .firework::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        box-shadow:
+          0 0 80px rgba(255, 255, 255, 0.8),
+          0 0 160px rgba(255, 180, 30, 0.5);
+      }
+
+      @keyframes fireworkParticle {
+        0% {
+          transform: scale(0.2) translate(0, 0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1.6) translate(var(--dx), var(--dy));
+          opacity: 0;
+        }
+      }
+
+      .astro,
+      .moto {
+        position: absolute;
+        z-index: 2;
+        font-size: 2.4rem;
+        text-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+        pointer-events: none;
+      }
+
+      .astro {
+        left: -12%;
+        top: 65%;
+        animation: flyAstronaut 13s linear infinite;
+      }
+
+      .moto {
+        right: -12%;
+        top: 78%;
+        animation: driveMoto 9s linear infinite;
+      }
+
+      @keyframes flyAstronaut {
+        0% {
+          transform: translateX(0) translateY(0) rotate(0deg);
+          opacity: 0.95;
+        }
+        50% {
+          transform: translateX(130vw) translateY(-55px) rotate(18deg);
+          opacity: 0.95;
+        }
+        100% {
+          transform: translateX(260vw) translateY(0) rotate(0deg);
+          opacity: 0.95;
+        }
+      }
+
+      @keyframes driveMoto {
+        0% {
+          transform: translateX(0) translateY(0) rotate(0deg);
+          opacity: 0.95;
+        }
+        50% {
+          transform: translateX(-140vw) translateY(-8px) rotate(-4deg);
+          opacity: 0.95;
+        }
+        100% {
+          transform: translateX(-280vw) translateY(0) rotate(0deg);
+          opacity: 0.95;
+        }
+      }
+
+      .flash-overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.35) 0%,
+          transparent 40%
+        );
+        opacity: 0;
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      .flash-overlay.active {
+        opacity: 0.85;
+        animation: flash 0.7s ease-out forwards;
+      }
+
+      @keyframes flash {
+        0% {
+          opacity: 0.85;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .scene {
+        position: relative;
+        width: min(90vw, 900px);
+        max-width: 900px;
+        z-index: 4;
+      }
+
+      .image-frame {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        box-shadow:
+          0 0 120px rgba(255, 255, 255, 0.08),
+          0 0 40px rgba(255, 150, 0, 0.28);
+      }
+
+      .image-frame img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 24px;
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+      }
+
+      .explosions {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+      }
+
+      .blast {
+        position: absolute;
+        width: var(--size, 42px);
+        height: var(--size, 42px);
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 245, 180, 1) 18%,
+          rgba(255, 180, 40, 0.95) 40%,
+          rgba(255, 90, 0, 0.7) 65%,
+          transparent 100%
+        );
+        box-shadow:
+          0 0 80px rgba(255, 240, 200, 1),
+          0 0 160px rgba(255, 180, 40, 0.7),
+          0 0 260px rgba(255, 110, 0, 0.35),
+          inset 0 0 45px rgba(255, 255, 255, 0.9);
+        opacity: 0;
+        transform: scale(0.15);
+        animation: explode 0.9s ease-out forwards;
+      }
+
+      .blast::before,
+      .blast::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 200, 150, 0.4) 30%,
+          transparent 60%
+        );
+        opacity: 0.85;
+      }
+
+      .blast::before {
+        filter: blur(10px);
+      }
+
+      .blast::after {
+        transform: scale(2.2);
+        opacity: 0.4;
+        filter: blur(18px);
+      }
+
+      @keyframes explode {
+        0% {
+          transform: translate(0, 0) scale(0.15);
+          opacity: 1;
+        }
+        25% {
+          transform: translate(
+              calc(-25px - 22px * var(--x)),
+              calc(-25px - 22px * var(--y))
+            )
+            scale(3.4);
+          opacity: 1;
+        }
+        55% {
+          transform: translate(
+              calc(-45px - 36px * var(--x)),
+              calc(-45px - 36px * var(--y))
+            )
+            scale(2.6);
+          opacity: 0.92;
+        }
+        80% {
+          transform: translate(
+              calc(-65px - 45px * var(--x)),
+              calc(-65px - 45px * var(--y))
+            )
+            scale(1.8);
+          opacity: 0.65;
+        }
+        100% {
+          transform: translate(
+              calc(-90px - 65px * var(--x)),
+              calc(-90px - 65px * var(--y))
+            )
+            scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      .message {
+        margin-top: 22px;
+        text-align: center;
+        font-size: 1rem;
+        color: #ddd;
+      }
+
+      .small-link {
+        display: inline-block;
+        margin-top: 14px;
+        color: #77d1ff;
+        text-decoration: none;
+      }
+
+      .audio-button {
+        display: inline-block;
+        margin: 14px 8px 0 0;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #ffb347, #ff5f6d);
+        color: #111;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 28px rgba(255, 95, 109, 0.35);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .audio-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 32px rgba(255, 95, 109, 0.45);
+      }
+
+      .audio-controls {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 12;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .bird-button {
+        display: inline-block;
+        margin: 0;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #6fcf97, #27ae60);
+        color: #111;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 28px rgba(39, 174, 96, 0.35);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .bird-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 32px rgba(39, 174, 96, 0.45);
+      }
+
+      .tree-wrapper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 22vh;
+        z-index: 5;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: flex-end;
+        pointer-events: none;
+      }
+
+      .tree {
+        position: relative;
+        width: 48px;
+        height: 120px;
+        transform-origin: bottom center;
+        transition:
+          transform 1s ease,
+          opacity 1s ease;
+      }
+
+      .tree.falling {
+        transform: rotate(-70deg) translateX(-40px) translateY(30px);
+        opacity: 0.25;
+      }
+
+      .tree .trunk {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 16px;
+        height: 60px;
+        background: #794a12;
+        transform: translateX(-50%);
+        border-radius: 8px;
+      }
+
+      .tree .foliage {
+        position: absolute;
+        bottom: 44px;
+        left: 50%;
+        width: 72px;
+        height: 72px;
+        background: radial-gradient(circle at 30% 30%, #a3e635 0%, #3f6212 60%);
+        border-radius: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 0 26px rgba(162, 231, 54, 0.45);
+      }
+
+      .moto,
+      .moto2 {
+        position: absolute;
+        z-index: 6;
+        font-size: 4.2rem;
+        text-shadow: 0 0 22px rgba(0, 0, 0, 0.7);
+        pointer-events: none;
+      }
+
+      .moto2 {
+        right: -14%;
+        top: 55%;
+        animation: driveMoto2 10s linear infinite;
+      }
+
+      .moto {
+        right: -12%;
+        top: 78%;
+        animation: driveMoto 9s linear infinite;
+      }
+
+      @keyframes driveMoto2 {
+        0% {
+          transform: translateX(0) translateY(0) rotate(0deg);
+          opacity: 0.95;
+        }
+        50% {
+          transform: translateX(-150vw) translateY(-16px) rotate(-5deg);
+          opacity: 0.95;
+        }
+        100% {
+          transform: translateX(-300vw) translateY(0) rotate(0deg);
+          opacity: 0.95;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <video
+      class="background-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      src="renato-garcia.mp4"
+    ></video>
+    <audio id="eagleAudio" src="https://www.soundjay.com/nature/sounds/eagle-1.mp3" loop preload="none"></audio>
+    <audio id="birdsAudio" src="passaros.mp3" loop preload="none"></audio>
+    <div class="fireworks" id="fireworks"></div>
+    <div class="flash-overlay" id="flashOverlay"></div>
+    <div class="tree-wrapper" id="treeWrapper">
+      <div class="tree">
+        <div class="trunk"></div>
+        <div class="foliage"></div>
+      </div>
+      <div class="tree">
+        <div class="trunk"></div>
+        <div class="foliage"></div>
+      </div>
+      <div class="tree">
+        <div class="trunk"></div>
+        <div class="foliage"></div>
+      </div>
+      <div class="tree">
+        <div class="trunk"></div>
+        <div class="foliage"></div>
+      </div>
+    </div>
+    <div class="astro">👨‍🚀</div>
+    <div class="moto">🏍️</div>
+    <div class="moto2">🏍️</div>
+    <div class="audio-controls">
+      <button id="audioToggle" class="audio-button" type="button">Play águia</button>
+      <button id="birdsToggle" class="bird-button" type="button">Passarinhos</button>
+    </div>
+    <div class="scene">
+      <div class="image-frame">
+        <img id="mainImage" src="" alt="Imagem Neyma" />
+        <div class="explosions" id="explosions"></div>
+      </div>
+      <div class="message">
+        Explosões na frente da imagem.
+        <div>
+          <a class="small-link" href="neymar.html">Voltar para Neymaaar</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+      }
+
+      const imageUrl = getQueryParam("img");
+      const mainImage = document.getElementById("mainImage");
+      const explosions = document.getElementById("explosions");
+
+      const eagleAudio = document.getElementById("eagleAudio");
+      const fireworks = document.getElementById("fireworks");
+      const flashOverlay = document.getElementById("flashOverlay");
+
+      const audioToggle = document.getElementById("audioToggle");
+      const birdsToggle = document.getElementById("birdsToggle");
+      const birdsAudio = document.getElementById("birdsAudio");
+
+      if (imageUrl) {
+        mainImage.src = decodeURIComponent(imageUrl);
+      } else {
+        mainImage.alt = "Nenhuma imagem fornecida";
+      }
+
+      if (eagleAudio) {
+        eagleAudio.volume = 1.0;
+      }
+
+      if (birdsAudio) {
+        birdsAudio.volume = 0.95;
+      }
+
+      function updateAudioButton() {
+        if (!audioToggle || !eagleAudio) return;
+        audioToggle.textContent = eagleAudio.paused ? "Play águia" : "Pausar águia";
+      }
+
+      function updateBirdsButton() {
+        if (!birdsToggle || !birdsAudio) return;
+        birdsToggle.textContent = birdsAudio.paused
+          ? "Passarinhos"
+          : "Paus. passarinhos";
+      }
+
+      if (audioToggle && eagleAudio) {
+        audioToggle.addEventListener("click", () => {
+          if (eagleAudio.paused) {
+            eagleAudio.play().catch(() => {});
+          } else {
+            eagleAudio.pause();
+          }
+          updateAudioButton();
+        });
+      }
+
+      if (birdsToggle && birdsAudio) {
+        birdsToggle.addEventListener("click", () => {
+          if (birdsAudio.paused) {
+            birdsAudio.play().catch(() => {});
+          } else {
+            birdsAudio.pause();
+          }
+          updateBirdsButton();
+        });
+      }
+
+      updateAudioButton();
+      updateBirdsButton();
+
+      function createBlast(x, y) {
+        const blast = document.createElement("div");
+        blast.className = "blast";
+        const size = 36 + Math.random() * 70;
+        blast.style.setProperty("--size", `${size}px`);
+        blast.style.left = `${x}%`;
+        blast.style.top = `${y}%`;
+        blast.style.setProperty("--x", Math.random().toFixed(2));
+        blast.style.setProperty("--y", Math.random().toFixed(2));
+        explosions.appendChild(blast);
+        setTimeout(() => blast.remove(), 1300);
+      }
+
+      function createFirework() {
+        const firework = document.createElement("div");
+        firework.className = "firework";
+        const x = 10 + Math.random() * 80;
+        const y = 8 + Math.random() * 65;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 100 + Math.random() * 120;
+        firework.style.left = `${x}%`;
+        firework.style.top = `${y}%`;
+        firework.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+        firework.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+        fireworks.appendChild(firework);
+        setTimeout(() => firework.remove(), 950);
+      }
+
+      function triggerFlash() {
+        flashOverlay.classList.add("active");
+        setTimeout(() => flashOverlay.classList.remove("active"), 700);
+      }
+
+      function burstExplosions() {
+        const count = 10 + Math.floor(Math.random() * 6);
+        triggerFlash();
+        for (let i = 0; i < count; i += 1) {
+          const x = 15 + Math.random() * 70;
+          const y = 8 + Math.random() * 72;
+          createBlast(x, y);
+        }
+      }
+
+      function maybeFallTree() {
+        const trees = Array.from(document.querySelectorAll(".tree"));
+        const intact = trees.filter(
+          (tree) => !tree.classList.contains("falling"),
+        );
+        if (intact.length === 0) return;
+        if (Math.random() < 0.35) {
+          const tree = intact[Math.floor(Math.random() * intact.length)];
+          tree.classList.add("falling");
+        }
+      }
+
+      let riderDead = false;
+      function maybeKillRider() {
+        if (riderDead) return;
+        if (Math.random() < 0.01) {
+          const chosen =
+            Math.random() < 0.5
+              ? document.querySelector(".moto")
+              : document.querySelector(".moto2");
+          if (chosen) {
+            chosen.textContent = "💀";
+            chosen.style.animationPlayState = "paused";
+            chosen.style.opacity = "0.8";
+            riderDead = true;
+          }
+        }
+      }
+
+      function launchFireworks() {
+        const count = 4 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < count; i += 1) {
+          createFirework();
+        }
+        maybeFallTree();
+        maybeKillRider();
+      }
+
+      setInterval(burstExplosions, 700);
+      setInterval(launchFireworks, 850);
+      burstExplosions();
+      launchFireworks();
+    </script>
+  </body>
+</html>
