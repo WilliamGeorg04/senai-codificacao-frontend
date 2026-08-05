@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Loja</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -23,17 +24,49 @@
                     <img src="assets/camisa.jpg" alt="Camisa Branca" width="250" height="250" loading="lazy">
                     <figcaption>Camiseta branca - R$ 59,90</figcaption>
                 </figure>
-
+                <!-- Quando o caminho ficou errado a imagem não foi carregada e o navegador exibiu o texto alternativo da imagem. -->
             </article>
         </section>
         <section>
-            <h4>Descrição em áudio</h4>
+            <h4>Vídeo do produto</h4>
             <video controls width="400" preload="metadata">
                 <source src="assets/video.mp4" type="video/mp4">
                 Seu navegador não suporta vídeo.
             </video>
         </section>
+        <section>
+            <h4>Descrição em áudio</h4>
+            <audio controls preload="metadata">
+                <source src="assets/descricao-produto.mp3" type="audio/mpeg">
+                Seu navegador não suporta áudio.
+            </audio>
+        </section>
+        <section>
+            <h4>Conteúdo externo</h4>
+            <iframe src="https://www.youtube.com/embed/a4cA0ET9DRY" width="400" height="225"
+                title="Vídeo externo sobre tecnologia" loading="lazy" allowfullscreen>
+            </iframe>
+        </section>
+        <footer>
+            <p>(Mal) Desenvolvido por: Tiago Henrique Padilha, Vinicius Genaro Fernandes, William Davi Georg</p>
+        </footer>
     </main>
 </body>
 
 </html>
+
+<!--- 
+<img src=img/camisa.jpg alt="produto"></img>
+
+<img src="assets/camisa.jpg" alt="produto">
+-->
+
+<!--- 
+<video width="400">
+    <source src="img/video.mp4">
+</video>
+
+<video width="400" controls>
+    <source src="img/video.mp4" type="video/mp4">
+</video>
+-->
