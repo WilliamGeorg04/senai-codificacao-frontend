@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Loja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Mini Loja</h1>
+        <nav>
+            <ul>
+                <li><a href="#produtos">Produtos</a></li>
+                <li><a href="#video">Vídeo</a></li>
+                <li><a href="#contato">Contato</a></li>
+                <li><a href="#local">Onde estamos</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="produtos">
+            <h2>Produtos</h2>
+            <article>
+                <h3>Smartphone</h3>
+                <img src="img/iphone.jpg" alt="Smartphone Apple Iphone" width="250" height="250" loading="lazy">
+                <p>Preço: R$ 242,90</p>
+            </article>
+            <article>
+                <h3>Camiseta</h3>
+                <figure>
+                    <img src="img/camisa.jpg" alt="Camisa Branca" width="250" height="250" loading="lazy">
+                    <figcaption>Camiseta branca - R$ 59,90</figcaption>
+                </figure>
+            </article>
+            <article>
+                <h3>Fone de Ouvido</h3>
+                <img src="img/OIP.webp" alt="Fone de Ouvido" width="250" height="250" loading="lazy">
+                <p>Preço: R$ 99,90</p>
+            </article>
+            <table>
+                <tr>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                    <th>Categoria</th>
+                </tr>
+                <tr>
+                    <td>Smartphone</td>
+                    <td>R$ 242,90</td>
+                    <td>Eletrônicos</td>
+                </tr>
+                <tr>
+                    <td>Camiseta</td>
+                    <td>R$ 59,90</td>
+                    <td>Roupas</td>
+                </tr>
+                <tr>
+                    <td>Fone de Ouvido</td>
+                    <td>R$ 99,90</td>
+                    <td>Eletrônicos</td>
+                </tr>
+            </table>
+        </section>
+        <section id="video">
+            <h2>Vídeo do produto</h2>
+            <video poster="img/imagesaa.jpg" controls width="400" preload="metadata">
+                <source src="midia/video.mp4" type="video/mp4">
+                Seu navegador não suporta vídeo.
+            </video>
+        </section>
+        <section id="audio">
+            <h2>Descrição em áudio</h2>
+            <audio controls preload="metadata">
+                <source src="midia/descricao-produto.mp3" type="audio/mpeg">
+                Seu navegador não suporta áudio.
+            </audio>
+        </section>
+        <section id="externo">
+            <h2>Conteúdo externo</h2>
+            <iframe src="https://www.youtube.com/embed/a4cA0ET9DRY" width="400" height="225"
+                title="Vídeo externo sobre tecnologia" loading="lazy" allowfullscreen>
+            </iframe>
+        </section>
+        <section id="contato">
+            <h2>Contato</h2>
+            <p>Entre em contato conosco!</p>
+            <form>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="_replyto" required>
+                <label for="mensagem">Mensagem:</label>
+                <textarea id="mensagem" name="mensagem" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+        <section id="local">
+            <h2>Onde estamos</h2>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d374.119660755901!2d-51.179149337425756!3d-29.916424372863247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9519700872ad10e9%3A0x6f0792ac1d871519!2sConjunto%20Comercial%20Canoas!5e1!3m2!1spt-BR!2sbr!4v1785976148317!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </section>
+    </main>
+    <footer>
+        <p>(Mal) Desenvolvido por: (Mau) Tiago Henrique Padilha, (Os dois né) Vinicius Genaro Fernandes,(bEM)
+            William Davi Georg
+        </p>
+    </footer>
+</body>
+
+</html>
